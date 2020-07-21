@@ -150,13 +150,13 @@ public class IngresosController extends Control implements Serializable{
 	public void remove(ActionEvent event) {
 		try {
 			ingreso = (Ingresos) event.getComponent().getAttributes().get("ingreso");
-			itemService.delete(ingreso.getIdingreso());
+			ingresosService.delete(ingreso.getIdingreso());
 			getIngresos();;
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info","Se ha eliminado el Item"));
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Info","Se ha eliminado el Ingreso"));
 			PrimeFaces.current().ajax().update("formTable");
 		} catch (Exception e) {
 			if (isReferenceConstraintException(e)) {
-				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error","Existen referencias para este item"));
+				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error","Existen referencias para este Ingreso"));
 			}else {
 				e.printStackTrace();
 				FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error","Error Eliminando Item"));

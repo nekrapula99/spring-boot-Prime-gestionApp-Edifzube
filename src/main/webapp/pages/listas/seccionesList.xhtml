@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<f:view xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" contentType="text/html">
+	<html>
+
+<p:dialog widgetVar="dlgSecciones" id="dlgSecciones" responsive="true"
+	onShow="PF('dTableSecciones').clearFilters();" modal="true"
+	onHide="PF('dTableSecciones').clearFilters();"
+	header="Secciones"  resizable="false">
+	
+	<p:ajax event="close" listener="#{itemController.evtCloseDialog}" />
+
+	<p:dataTable id="dTableSecciones" widgetVar="dTableSecciones"
+		var="seccion" value="#{itemController.seccionesList}" rows="5"
+		paginator="true"  filteredValue="#{itemController.filteredSeccion}"
+		selectionMode="single" style="width:500px" scrollable="true"
+		emptyMessage="No se encontraron datos."
+		selection="#{seccionController.seccion}" rowKey="#{seccion.idseccion}"
+		paginatorPosition="bottom" reflow="true"
+		currentPageReportTemplate="#{mensajes.grid_total_registros} {totalRecords}"
+		paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} ">
+
+		<p:ajax event="rowSelect" listener="#{seccionController.llenarObjectCall}"
+			oncomplete="PF('dlgSecciones').hide();"
+			update="#{seccionController.update}" />
+
+
+		<!-- Codigo Generico-->
+		<p:column headerText="Codigo Seccion" 
+			filterBy="#{seccion.codseccion}" filterMatchMode="contains" width="120">
+			<h:outputText value="#{seccion.codseccion}" />
+		</p:column>
+
+		<!-- Nombre Generico -->
+		<p:column headerText="Descripción"
+			filterBy="#{seccion.nombreseccion}" filterMatchMode="contains" width="150">
+			<h:outputText value="#{seccion.nombreseccion}" />
+		</p:column>
+
+	</p:dataTable>
+ </p:dialog>
+
+	</html>
+</f:view>

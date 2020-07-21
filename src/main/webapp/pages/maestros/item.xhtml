@@ -1,0 +1,279 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:define name="content">
+    
+     <div class="container">
+    
+        <div class="ui-g">
+        
+            <div class="ui-g-12">
+                  
+                 <div class="card">
+        
+			       <h1>ITEMS</h1>
+			       
+			       
+			       <h:form id="formNuevoUpdate">
+								<p:commandButton name="rcNuevoUpdate" value="Nuevo Item"
+									oncomplete="PF('dlgNuevoUpdate').show();"
+									actionListener="#{itemController.accionNuevo}" update=":formDetalle" />
+					</h:form>
+			      
+			    		<!-- //////////////////////////////////////////////////////////////////////// -->
+						<!-- //////////////////////////////// DATATABLE ///////////////////////////// -->
+						<h:form id="formTable">
+							
+							<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+							<p:dataTable id="dTable" widgetVar="fTable" var="item" reflow="true"
+								paginator="true" paginatorPosition="bottom" rows="10"
+								rowKey="#{item.iditem}" scrollable="true" 
+								value="#{itemController.itemsList}" selectionMode="single"
+								selection="#{itemController.item}"
+								filteredValue="#{itemController.filtered}"
+								resizableColumns="true"
+								currentPageReportTemplate="Total Registros: {totalRecords}"  emptyMessage="No se encontraron datos."
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+				
+								<p:ajax event="rowSelect" listener="#{itemController.modificar}"  
+									oncomplete="PF('dlgNuevoUpdate').show();" update=":formDetalle" />
+				
+								
+								<p:column style="width:14px;" exportable="false">
+										<f:facet name="header">
+											<p:commandLink id="clarFilterLink"	onclick="PF('fTable').clearFilters();">
+												<p:graphicImage value="/resources/images/clean_filters.png"  height="16" title="Limpiar filtros" />
+											</p:commandLink>
+										</f:facet>
+									<p:commandLink  id="deleteLink" update=":formTable" actionListener="#{itemController.remove}" process="@this" title="Eliminar">	
+										<p:graphicImage value="/resources/images/Trash.gif" style="border:0;" height="16" title="Eliminar" />									
+										<p:confirm header="Confirmation" message="¿Esta seguro que desea eliminar este item?" icon="pi pi-exclamation-triangle" />
+										<f:attribute name="item" value="#{item}" />
+									</p:commandLink>
+									
+									<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+								        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+								        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								    </p:confirmDialog>  
+								</p:column>
+				                
+						 
+								<!-- codigo item -->
+								<p:column headerText="Codigo" filterBy="#{item.coditem}" sortBy="#{item.coditem}"
+									filterMatchMode="contains" width="110">
+									<h:outputText value="#{item.coditem}" />
+								</p:column>
+				
+								<!-- Descripccón -->
+								<p:column headerText="Nombre Item" filterBy="#{item.descripcion}"
+									filterMatchMode="contains" width="130" sortBy="#{item.descripcion}">
+									<h:outputText value="#{item.descripcion}" />
+								</p:column>
+								
+								<!-- SECCION -->
+								<p:column headerText="Sección" filterBy="#{item.seccion.codseccion}"
+									filterMatchMode="contains" width="200" sortBy="#{item.seccion.codseccion}">
+									<h:outputText value="#{item.seccion.codseccion} - #{item.seccion.nombreseccion}" />
+								</p:column>	
+				
+								<!-- PROVEEDOR -->
+								<p:column headerText="Proveedor"
+									filterBy="#{item.proveedor}" filterMatchMode="contains" sortBy="#{item.proveedor}"
+									width="110">
+									<h:outputText value="#{item.proveedor}" />
+								</p:column>
+								
+								<!-- Unidad de medida -->
+								<p:column headerText="Unidad medida"
+									filterBy="#{item.unimedida}" filterMatchMode="contains" sortBy="#{item.unimedida}"
+									width="110">
+									<h:outputText value="#{item.unimedida}" />
+								</p:column>
+								
+								<!-- IVA -->
+								<p:column headerText="Iva"
+									filterBy="#{item.iva}" filterMatchMode="contains" sortBy="#{item.iva}"
+									width="80">
+									<h:outputText value="#{item.iva} %" />
+								</p:column>
+								
+								<!--PRECIO -->
+								<p:column headerText="Precio"
+									filterBy="#{item.precio}" filterMatchMode="contains" sortBy="#{item.precio}"
+									width="100">
+									<h:outputText value="#{item.precio}">
+									<pe:keyFilter regEx="/[\d\-\.]/" />		
+									<f:convertNumber pattern="¤#,##0.00" locale="en_US" />
+									</h:outputText>
+								</p:column>
+								
+								
+								<!-- FECHA -->
+								<p:column headerText="Fecha Creción"
+									filterBy="#{item.fecha_creacion}" filterMatchMode="contains" sortBy="#{item.fecha_creacion}"
+									width="110">
+									
+									<h:outputText value="#{item.fecha_creacion}" >
+										<f:convertDateTime pattern = "dd-MM-yyyy"/>
+									</h:outputText>
+								</p:column>
+				
+							</p:dataTable>
+						</h:form>
+						
+						
+							<!-- DIALOG EMPLEADO -->				
+					
+						<h:form id="formDetalle">
+						
+						<ui:include src="/pages/listas/seccionesList.xhtml" />
+	
+						 	<p:dialog header="#{itemController.titulo}" widgetVar="dlgNuevoUpdate" 
+						 			height="400" width="640"
+									resizable="false" modal="true" responsive="true">
+									
+								<p:ajax event="close" listener="#{itemController.evtCloseDialog}" />				                  			            	                		
+			                			
+										<h:panelGrid id="pnlDetalle" styleClass="ui-panelgrid-blank" >
+										
+											<p:messages id="mensajeDetalle" showDetail="true" autoUpdate="true" closable="true" />
+							
+											<p:panelGrid id="pnlEmpleado" styleClass="nba-grid, ui-panelgrid-blank">
+											
+												<p:row>
+													<!-- CODIGO ITEM -->
+													<p:column>
+														<h:outputLabel for="coditem" value="Código" />
+													</p:column>
+													<p:column>
+														<p:inputText id="coditem"  style="width:250px;" label="Codigo"
+															value="#{itemController.item.coditem}" 
+															required="true"	requiredMessage="Código: Campo obligatorio" />
+													</p:column>
+												</p:row>
+							
+												<!--Nombre item -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="descripcion" value="Nombre Item" />
+													</p:column>
+													<p:column>
+														<p:inputText id="descripcion" label="Nombre" style="width:250px;"
+															value="#{itemController.item.descripcion}"
+															required="true" requiredMessage="Nombre item: Campo obligatorio" />
+													</p:column>
+												</p:row>
+												
+												
+											<!-- LISTA SECCIONES -->
+												
+											<p:row>
+												<p:column>
+													<h:outputLabel for="seccionColumnDesc" value="Sección" />
+												</p:column>
+												<p:column>										
+														<p:autoComplete id="seccionColumn" value="#{itemController.item.seccion}" 
+																var="seccion" itemLabel="#{seccion.codseccion}" itemValue="#{seccion}"
+																converter="#{seccionConverter}" completeMethod="#{itemController.completeSeccion}"
+																maxlenght="20" size="20" forceSelection="true" scrollHeight="250"
+																placeholder="Buscar..." label="Seccion"
+																requiredMessage="Sección : Campo obligatorio">	
+																<p:ajax event="blur" update=":formDetalle:seccionColumnDesc" />													
+														</p:autoComplete>
+														<p:inputText id="seccionColumnDesc" value="#{itemController.item.seccion.nombreseccion}" readonly="true" />
+													<p:commandButton id="itemBtnSeccion" icon="ui-icon-search"
+														oncomplete="PF('dlgSecciones').show();"
+														update=":formDetalle:dTableSecciones" process="@this">
+														<f:setPropertyActionListener target="#{seccionController.objSeCall}" value="#{itemController}" />
+														<f:setPropertyActionListener target="#{seccionController.nombreLista}"	value="seccion" />
+														<f:setPropertyActionListener target="#{seccionController.update}" 	value=":formDetalle:seccionColumn, :formDetalle:seccionColumnDesc" />
+													</p:commandButton>
+												</p:column>
+											</p:row>
+			
+												<!--PROVEEDOR -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="proveedor" value="Proveedor" />
+													</p:column>
+													<p:column>
+														<p:inputText id="proveedor"  label="Proveedor" style="width:250px;"
+															value="#{itemController.item.proveedor}"
+															required="false" />
+													</p:column>
+												</p:row>
+												
+												<!--Unidad de medida  -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="unimedida" value="Unidad de medida" />
+													</p:column>
+													<p:column>
+														<p:inputText id="unimedida" style="width:250px;"
+															value="#{itemController.item.unimedida}" label="Unidad de medida"
+															maxlength="10" required="false" />
+													</p:column>
+												</p:row>
+												
+												<!--Iva item -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="iva" value="Iva" />
+													</p:column>
+													<p:column>
+													<p:inputNumber id="iva" value="#{itemController.item.iva}"
+															label="Iva" symbolPosition="s" symbol="%" minValue="0" maxValue="100"
+															required="true" requiredMessage="Iva: Campo obligatorio">
+														</p:inputNumber>
+											
+													</p:column>
+												</p:row>
+												
+												<!--precio -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="precio" value="Precio" />
+													</p:column>
+													<p:column>
+														<p:inputNumber id="precio" value="#{itemController.item.precio}"
+															label="Precio" decimalSeparator="," thousandSeparator="."
+															required="true" requiredMessage="Precio: Campo obligatorio">
+														</p:inputNumber>
+													</p:column>
+												</p:row>
+																
+											</p:panelGrid>
+							
+											<p:separator />
+
+										</h:panelGrid>
+										
+										
+	
+								<f:facet name="footer">
+									<p:commandButton value="Guardar" actionListener="#{itemController.save}" update=":formDetalle:pnlDetalle,:formDetalle:mensajeDetalle">
+									<p:confirm header="Confirmation" message="¿Guardar registro?" icon="pi pi-exclamation-triangle" />
+									</p:commandButton>
+									<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+								        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+								        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								    </p:confirmDialog>		
+								</f:facet>
+							</p:dialog>
+							
+						</h:form>
+						
+			
+					</div>
+              </div>                
+           </div>   
+        </div>
+ 
+    </ui:define>
+
+</ui:composition>

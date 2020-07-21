@@ -1,0 +1,338 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml"
+                xmlns:pe="http://primefaces.org/ui/extensions">
+
+    <ui:define name="content">
+    
+     <div class="container">
+    
+        <div class="ui-g">
+        
+            <div class="ui-g-12">
+                  
+                 <div class="card">
+        
+			       <h1>INGRESOS</h1>
+			       
+			       
+			       <h:form id="formNuevoUpdate">
+								<p:commandButton name="rcNuevoUpdate" value="Nuevo Ingreso"
+									oncomplete="PF('dlgNuevoUpdate').show();"
+									actionListener="#{ingresosController.accionNuevo}" update=":formDetalle" />
+					</h:form>
+			      
+			    		<!-- //////////////////////////////////////////////////////////////////////// -->
+						<!-- //////////////////////////////// DATATABLE ///////////////////////////// -->
+						<h:form id="formTable">
+							
+							<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
+							<p:dataTable id="dTable" widgetVar="fTable" var="ingreso" reflow="true"
+								paginator="true" paginatorPosition="bottom" rows="10"
+								rowKey="#{ingreso.idingreso}" scrollable="true" 
+								value="#{ingresosController.ingresosList}" selectionMode="single"
+								selection="#{ingresosController.ingreso}"
+								filteredValue="#{ingresosController.filtered}"
+								resizableColumns="true"
+								currentPageReportTemplate="Total Registros: {totalRecords}"  emptyMessage="No se encontraron datos."
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+				
+								<p:ajax event="rowSelect" listener="#{ingresosController.modificar}"  
+									oncomplete="PF('dlgNuevoUpdate').show();" update=":formDetalle" />
+				
+								
+								<p:column style="width:14px;" exportable="false">
+										<f:facet name="header">
+											<p:commandLink id="clarFilterLink"	onclick="PF('fTable').clearFilters();">
+												<p:graphicImage value="/resources/images/clean_filters.png"  height="16" title="Limpiar filtros" />
+											</p:commandLink>
+										</f:facet>
+									<p:commandLink  id="deleteLink" update=":formTable" actionListener="#{ingresosController.remove}" process="@this" title="Eliminar">	
+										<p:graphicImage value="/resources/images/Trash.gif" style="border:0;" height="16" title="Eliminar" />									
+										<p:confirm header="Confirmation" message="¿Esta seguro que desea eliminar este item?" icon="pi pi-exclamation-triangle" />
+										<f:attribute name="ingreso" value="#{ingreso}" />
+									</p:commandLink>
+									
+									<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+								        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+								        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								    </p:confirmDialog>  
+								</p:column>
+								
+								<!-- FECHA INGRESO-->
+								<p:column headerText="Fecha Ingreso"
+									filterBy="#{ingreso.fechaingreso}" filterMatchMode="contains" sortBy="#{item.fechaingreso}"
+									width="110">
+									
+									<h:outputText value="#{ingreso.fechaingreso}" >
+										<f:convertDateTime pattern = "dd-MM-yyyy"/>
+									</h:outputText>
+								</p:column>
+				                
+						 
+								<!-- codigo Ingreso -->
+								<p:column headerText="Codigo" filterBy="#{ingreso.codingreso}" sortBy="#{ingreso.codingreso}"
+									filterMatchMode="contains" width="110">
+									<h:outputText value="#{ingreso.codingreso}" />
+								</p:column>
+				
+								<!-- Detalle -->
+								<p:column headerText="Detalle" filterBy="#{ingreso.detalle}"
+									filterMatchMode="contains" width="130" sortBy="#{ingreso.detalle}">
+									<h:outputText value="#{ingreso.detalle}" />
+								</p:column>
+								
+								<!-- CANTIDAD -->
+								<p:column headerText="Cantidad" filterBy="#{ingreso.cantidad}"
+									filterMatchMode="contains" width="80" sortBy="#{ingreso.cantidad}">
+									<h:outputText value="#{ingreso.cantidad}" />
+								</p:column>	
+				
+								<!-- Unidad de medida -->
+								<p:column headerText="Unidad de medida"
+									filterBy="#{ingreso.unimedida}" filterMatchMode="contains" sortBy="#{ingreso.unimedida}"
+									width="130">
+									<h:outputText value="#{ingreso.unimedida}" />
+								</p:column>
+								
+								<!--VALOR UNITARIO -->
+								<p:column headerText="Valor Unitario"
+									filterBy="#{ingreso.valorunitario}" filterMatchMode="contains" sortBy="#{ingreso.valorunitario}"
+									width="100">
+									<h:outputText value="#{ingreso.valorunitario}">
+									<pe:keyFilter regEx="/[\d\-\.]/" />		
+									<f:convertNumber pattern="¤#,##0.00" locale="en_US" />
+									</h:outputText>
+								</p:column>
+								
+	
+								<!-- IVA -->
+								<p:column headerText="Iva"
+									filterBy="#{ingreso.iva}" filterMatchMode="contains" sortBy="#{ingreso.iva}"
+									width="70">
+									<h:outputText value="#{ingreso.iva} %" />
+								</p:column>
+								
+								<!--Valor total -->
+								<p:column headerText="Valor Total"
+									filterBy="#{ingreso.valortotal}" filterMatchMode="contains" sortBy="#{ingreso.valortotal}"
+									width="100">
+									<h:outputText value="#{ingreso.valortotal}">
+									<pe:keyFilter regEx="/[\d\-\.]/" />		
+									<f:convertNumber pattern="¤#,##0.00" locale="en_US" />
+									</h:outputText>
+								</p:column>
+								
+								
+								<!-- FECHA -->
+								<p:column headerText="Fecha Creción"
+									filterBy="#{ingreso.fecha_creacion}" filterMatchMode="contains" sortBy="#{ingreso.fecha_creacion}"
+									width="110">
+									
+									<h:outputText value="#{ingreso.fecha_creacion}" >
+										<f:convertDateTime pattern = "dd-MM-yyyy"/>
+									</h:outputText>
+								</p:column>
+				
+							</p:dataTable>
+						</h:form>
+						
+						
+							<!-- DIALOG EMPLEADO -->				
+					
+						<h:form id="formDetalle">
+						
+						<ui:include src="/pages/listas/itemsList.xhtml" />
+	
+						 	<p:dialog header="#{ingresosController.titulo}" widgetVar="dlgNuevoUpdate" 
+						 			height="500" width="640"
+									resizable="false" modal="true" responsive="true">
+									
+								<p:ajax event="close" listener="#{ingresosController.evtCloseDialog}" />				                  			            	                		
+			                			
+										<h:panelGrid id="pnlDetalle" styleClass="ui-panelgrid-blank" >
+										
+											<p:messages id="mensajeDetalle" showDetail="true" autoUpdate="true" closable="true" />
+							
+											<p:panelGrid id="pnlIngreso" styleClass="nba-grid, ui-panelgrid-blank">
+											
+											
+												<!-- LISTA ITEMS -->
+																								
+											<p:row>
+												<p:column>
+													<h:outputLabel for="itemsColumnDesc" value="Buscar Item" rendered="#{ingresosController.flagNuevo}"/>
+												</p:column>
+												<p:column>
+														<p:inputText id="itemsColumnDesc" value="#{ingresosController.detalleAux}" readonly="true" rendered="#{ingresosController.flagNuevo}"/>
+													<p:commandButton id="ingresoBtnItem" icon="ui-icon-search" rendered="#{ingresosController.flagNuevo}"
+														oncomplete="PF('dlgItems').show();"
+														update=":formDetalle:dTableItems" process="@this">
+														<f:setPropertyActionListener target="#{itemController.objSeCall}" value="#{ingresosController}" />
+														<f:setPropertyActionListener target="#{itemController.nombreLista}"	value="item" />
+														<f:setPropertyActionListener target="#{itemController.update}" 	value=":formDetalle:itemsColumnDesc,:formDetalle:codingresoNew,:formDetalle:detalleNew,:formDetalle:unimedidaNew,:formDetalle:valorunitarioNew,:formDetalle:ivaNew" />
+													</p:commandButton>
+												</p:column>
+											</p:row>
+			
+												
+												
+											<!--Fecha Ingreso -->
+											<p:row>			
+											<p:column>
+												<h:outputLabel for="fechaing" value="Fecha Ingreso" />
+											</p:column>
+											<p:column>
+												<p:calendar id="fechaing" value="#{ingresosController.ingreso.fechaingreso}" navigator="true" mask="true"
+													pattern="dd-MM-yyyy" mode="popup" showOn="button" popupIconOnly="true" >
+												</p:calendar>
+											</p:column>
+											</p:row>
+											
+
+											<p:row>
+												<!-- CODIGO Ingreso -->
+												<p:column>
+													<h:outputLabel for="codingreso" value="Código" />
+												</p:column>
+												<p:column>
+													<p:inputText id="codingresoNew"  style="width:205px;" label="Codigo" rendered="#{ingresosController.flagNuevo}"
+														value="#{ingresosController.codingresoAux}" 
+														required="true"	requiredMessage="Código: Campo obligatorio" />
+													<p:inputText id="codingreso"  style="width:205px;" label="Codigo" rendered="#{!ingresosController.flagNuevo}"
+														value="#{ingresosController.ingreso.codingreso}" 
+														required="true"	requiredMessage="Código: Campo obligatorio" />
+												</p:column>
+											</p:row>
+							
+												<!--Detalle -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="detalle" value="Detalle" />
+													</p:column>
+													<p:column>
+													<p:inputText id="detalleNew" label="Nombre" style="width:205px;" rendered="#{ingresosController.flagNuevo}"
+															value="#{ingresosController.detalleAux}"
+															required="true" requiredMessage="Detalle: Campo obligatorio" />
+														<p:inputText id="detalle" label="Nombre" style="width:205px;" rendered="#{!ingresosController.flagNuevo}"
+															value="#{ingresosController.ingreso.detalle}"
+															required="true" requiredMessage="Detalle: Campo obligatorio" />
+													</p:column>
+												</p:row>
+		
+												<!--unimedida -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="unimedida" value="Unidad de medida" />
+													</p:column>
+													<p:column>
+													<p:inputText id="unimedidaNew"  label="Unidad de medida" style="width:205px;" rendered="#{ingresosController.flagNuevo}"
+															value="#{ingresosController.unimedidaAux}"
+															required="false" />
+														<p:inputText id="unimedida"  label="Unidad de medida" style="width:205px;" rendered="#{!ingresosController.flagNuevo}"
+															value="#{ingresosController.ingreso.unimedida}"
+															required="false" />
+													</p:column>
+												</p:row>
+												
+												<!--CANTIDAD -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="cantidad" value="Cantidad" />
+													</p:column>
+													<p:column>
+													<p:inputNumber id="cantidad" value="#{ingresosController.ingreso.cantidad}" valueChangeListener="#{ingresosController.cantidadChanged}"
+															label="Cantidad"
+															required="true" requiredMessage="Cantidad: Campo obligatorio">
+															<p:ajax event="keyup" process="@this" update="valortotalNew" global="false"/>
+														</p:inputNumber>
+											
+													</p:column>
+												</p:row>
+										
+												
+												<!--Valor unitario -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="valorunitario" value="Valor unitario" />
+													</p:column>
+													<p:column>
+													<p:inputNumber id="valorunitarioNew" value="#{ingresosController.valorunitarioAux}" rendered="#{ingresosController.flagNuevo}"
+															label="Valor unitario" decimalSeparator="," thousandSeparator="." valueChangeListener="#{ingresosController.valorUniChanged}"
+															required="true" requiredMessage="Valor Unitario: Campo obligatorio">
+															<p:ajax event="keyup" process="@this" update="valortotalNew" global="false"/>
+														</p:inputNumber>
+														<p:inputNumber id="valorunitario" value="#{ingresosController.ingreso.valorunitario}" rendered="#{!ingresosController.flagNuevo}"
+															label="Valor unitario" decimalSeparator="," thousandSeparator="." valueChangeListener="#{ingresosController.valorUniChanged}"
+															required="true" requiredMessage="Valor Unitario: Campo obligatorio">
+															<p:ajax event="keyup" process="@this" update="valortotalNew" global="false"/>
+														</p:inputNumber>
+													</p:column>
+												</p:row>
+												
+												<!--Iva item -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="iva" value="Iva" />
+													</p:column>
+													<p:column>
+													<p:inputNumber id="ivaNew" value="#{ingresosController.ivaAux}" rendered="#{ingresosController.flagNuevo}"
+															label="Iva" symbolPosition="s" symbol="%" minValue="0" maxValue="100" valueChangeListener="#{ingresosController.ivaChanged}"
+															required="true" requiredMessage="Iva: Campo obligatorio">
+															<p:ajax event="keyup" process="@this" update="valortotalNew" global="false"/>
+														</p:inputNumber>
+													<p:inputNumber id="iva" value="#{ingresosController.ingreso.iva}" rendered="#{!ingresosController.flagNuevo}"
+															label="Iva" symbolPosition="s" symbol="%" valueChangeListener="#{ingresosController.ivaChanged}"
+															required="true" requiredMessage="Iva: Campo obligatorio">
+															<p:ajax event="keyup" process="@this" update="valortotalNew" global="false"/>
+														</p:inputNumber>
+											
+													</p:column>
+												</p:row>
+												
+												<!--Valor total -->
+												<p:row>
+													<p:column>
+														<h:outputLabel for="valortotalNew" value="Valor total" />
+													</p:column>
+													<p:column>
+													<p:inputNumber id="valortotalNew" value="#{ingresosController.valortotalAux}"
+															label="Valro total" decimalSeparator="," thousandSeparator="." readonly="true"
+															required="false">
+														</p:inputNumber>
+													</p:column>
+												</p:row>
+																
+											</p:panelGrid>
+							
+											<p:separator />
+
+										</h:panelGrid>
+										
+										
+	
+								<f:facet name="footer">
+									<p:commandButton value="Guardar" actionListener="#{ingresosController.save}" update=":formDetalle:pnlDetalle,:formDetalle:mensajeDetalle">
+									<p:confirm header="Confirmation" message="¿Guardar registro?" icon="pi pi-exclamation-triangle" />
+									</p:commandButton>
+									<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+								        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+								        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+								    </p:confirmDialog>		
+								</f:facet>
+							</p:dialog>
+							
+						</h:form>
+						
+			
+					</div>
+              </div>                
+           </div>   
+        </div>
+ 
+    </ui:define>
+
+</ui:composition>

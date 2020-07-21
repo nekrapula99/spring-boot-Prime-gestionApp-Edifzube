@@ -1,0 +1,133 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="content">
+    
+     <div class="container">
+    
+        <div class="ui-g">
+        
+            <div class="ui-g-12">
+                  
+                <div class="card">
+        
+			       <h1>EMPLEADOS</h1>
+			       
+			       
+			       <h:form id="formNuevoUpdate">
+								<p:remoteCommand name="rcNuevoUpdate"
+									oncomplete="PF('dlgNuevoUpdate').show();"
+									actionListener="#{empleadoController.accionNuevo}" update=":formDetalle" />
+					</h:form>
+			       
+			    		<!-- //////////////////////////////////////////////////////////////////////// -->
+						<!-- //////////////////////////////// DATATABLE ///////////////////////////// -->
+						<h:form id="formTable">
+							
+							<p:messages id="messages" showDetail="false" autoUpdate="false" closable="true" />
+				
+							<p:dataTable id="dTable" widgetVar="fTable" var="empleado" reflow="true"
+								paginator="true" paginatorPosition="bottom" rows="10"
+								rowKey="#{empleado.idempleado}" scrollable="true" emptyMessage="#{mensajes.grid_emptyMessage}"
+								value="#{empleadoController.empleadosList}" selectionMode="single"
+								selection="#{empleadoController.empleado}"
+								filteredValue="#{empleadoController.filteredEmpleado}"
+								resizableColumns="true"
+								currentPageReportTemplate="#{mensajes.grid_total_registros} {totalRecords}"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+				
+			<!-- 					<p:ajax disabled="#{seCabecera.seControl.PERMISOSACCION.get('BTN_ACTUALIZAR')==null}" event="rowSelect" listener="#{seMconca00.accionModificar}"   -->
+			<!-- 						oncomplete="PF('dlgNuevoUpdate').show();" update=":formDetalle" /> -->
+				
+								
+								<p:column style="width:14px;" exportable="false">
+										<f:facet name="header">
+											<p:commandLink id="clarFilterLink"	onclick="PF('fTable').clearFilters();" actionListener="#{empleadoController.clearAllFilters}">
+												<p:graphicImage value="images/clean_filters.png"  height="16" title="Limpiar filtros" />
+											</p:commandLink>
+										</f:facet>
+			<!-- 						<p:commandLink disabled="#{seCabecera.seControl.PERMISOSACCION.get('BTN_ELIMINAR')==null}" id="deleteLink"  -->
+			<!-- 									  update=":formTable" actionListener="#{seMconca00.remove}" process="@this" title="#{mensajes.boton_eliminar}">	 -->
+			<!-- 							<p:graphicImage value="/resources/images/Trash.gif" style="border:0;" height="16" title="#{mensajes.boton_eliminar}" />									 -->
+			<!-- 							<p:confirm header="#{mensajes.confirm_titulo}" message="#{mensajes.confirm_mensaje_remove}" icon="ui-icon-alert" /> -->
+			<!-- 							<f:attribute name="mconca00" value="#{mconca00}" /> -->
+			<!-- 						</p:commandLink> -->
+								</p:column>
+				                
+						 
+								<!-- Cedula -->
+								<p:column headerText="Cedula" filterBy="#{empleado.cedula}" sortBy="#{empleado.cedula}"
+									filterMatchMode="contains" width="150">
+									<h:outputText value="#{empleado.cedula}" />
+								</p:column>
+				
+								<!-- Nombre -->
+								<p:column headerText="Nombre" filterBy="#{empleado.nombre}"
+									filterMatchMode="contains" width="250" sortBy="#{empleado.nombre}">
+									<h:outputText value="#{empleado.nombre}" />
+								</p:column>
+								
+								<!-- Apellido -->
+								<p:column headerText="Apellido" filterBy="#{empleado.apellido}"
+									filterMatchMode="contains" width="250" sortBy="#{empleado.apellido}">
+									<h:outputText value="#{empleado.apellido}" />
+								</p:column>	
+				
+								<!-- Telefono -->
+								<p:column headerText="Telefono"
+									filterBy="#{empleado.telefono}" filterMatchMode="contains" sortBy="#{empleado.telefono}"
+									width="200">
+									<h:outputText value="#{empleado.telefono}" />
+								</p:column>
+				
+							</p:dataTable>
+						</h:form>
+						
+						
+							<!-- DIALOG EMPLEADO -->				
+					
+						<h:form id="formDetalle">
+	
+	
+						 	<p:dialog header="AGREGAR NUEVO EMPLEADO" widgetVar="dlgNuevoUpdate" 
+						 			height="500" width="500"
+									resizable="false" modal="true" responsive="true">
+									
+								<p:ajax event="close" listener="#{empleadoController.evtCloseDialog}" />				                  			            	                		
+			                			
+										<h:panelGrid id="pnlDetalle" styleClass="ui-panelgrid-blank" >
+										
+											<p:messages id="mensajeDetalle" showDetail="false" autoUpdate="true" closable="true" />
+							
+											<p:panelGrid id="pnlMconca00" styleClass="nba-grid, ui-panelgrid-blank">
+												
+											</p:panelGrid>
+							
+											<p:separator />
+											
+												
+							
+										</h:panelGrid>
+	
+								<f:facet name="footer">
+									<p:commandButton value="#{mensajes.boton_guardar}" actionListener="#{empleado.save}" update=":formDetalle:pnlDetalle">
+										<p:confirm header="#{mensajes.confirm_titulo}" message="#{mensajes.confirm_mensaje_save}" icon="ui-icon-alert" />
+									</p:commandButton> 			
+								</f:facet>
+							</p:dialog>
+							
+						</h:form>
+						
+			
+					</div>
+              </div>                
+           </div>   
+        </div>
+ 
+    </ui:define>
+
+</ui:composition>

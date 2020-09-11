@@ -28,8 +28,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "ITEM")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "iditem")
 public class Item implements Serializable{
 	

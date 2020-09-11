@@ -43,7 +43,7 @@ public class LoginController {
 	public String loginCheck(@ModelAttribute(name="userCredentials") UserCredential userCredential) {
 		if(userCredential.getUsername().equals("admin") && userCredential.getPassword().equals("admin")) {
 			LOGGER.info("BIENVENIDO: "+userCredential.getUsername());
-			FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", userCredential.getUsername());
+			//FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuario", userCredential.getUsername());
 			return "index?faces-redirect=true";
 		}else {
 			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Aviso","Credenciales incorrectas"));	

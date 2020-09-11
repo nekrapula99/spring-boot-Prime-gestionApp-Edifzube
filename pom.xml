@@ -2,6 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<packaging>war</packaging>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -16,6 +17,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<start-class>com.edifzube.gestionApp.GestionAppApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -58,10 +60,19 @@
 		    <scope>provided</scope>
 		</dependency>
 		
-		 <dependency>
-	         <groupId>org.apache.tomcat.embed</groupId>
-	         <artifactId>tomcat-embed-jasper</artifactId>
-	      </dependency>
+<!-- 		<dependency> -->
+<!-- 	         <groupId>org.springframework.boot</groupId> -->
+<!-- 	         <artifactId>spring-boot-starter-tomcat</artifactId> -->
+<!-- 	      </dependency> -->
+
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-servlet-api</artifactId>
+			<version>9.0.19</version>
+		</dependency>
+		<!-- Thanks for using https://jar-download.com -->
+
+		
 	      <dependency>
 	         <groupId>org.primefaces</groupId>
 	         <artifactId>primefaces</artifactId>
@@ -98,10 +109,18 @@
             <scope>provided</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/javax.validation/validation-api -->
+
 		<dependency>
-		    <groupId>javax.validation</groupId>
-		    <artifactId>validation-api</artifactId>
-		    <version>1.0.0.GA</version>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>1.1.0.Final</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.el</groupId>
+			<artifactId>javax.el-api</artifactId>
+			<version>3.0.0</version>
+			<scope>test</scope>
 		</dependency>
         
 		
@@ -155,6 +174,15 @@
 
 	<build>
 		<plugins>
+		<plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.1</version>
+			<configuration>
+			<fork>true</fork>
+			<executable>C:\Program Files\Java\jdk1.8.0_211\bin\javac.exe</executable>
+			</configuration>
+        </plugin>
+		
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>

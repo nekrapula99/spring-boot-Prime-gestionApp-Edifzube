@@ -31,7 +31,7 @@
 							
 							<p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" />
 							<p:dataTable id="dTable" widgetVar="fTable" var="ingreso" reflow="true"
-								paginator="true" paginatorPosition="bottom" rows="10"
+								paginator="true" paginatorPosition="bottom" rows="10" sortBy="#{ingreso.valortotal}"
 								rowKey="#{ingreso.idingreso}" scrollable="true" 
 								value="#{ingresosController.ingresosList}" selectionMode="single"
 								selection="#{ingresosController.ingreso}"
@@ -64,7 +64,7 @@
 								
 								<!-- FECHA INGRESO-->
 								<p:column headerText="Fecha Ingreso"
-									filterBy="#{ingreso.fechaingreso}" filterMatchMode="contains" sortBy="#{item.fechaingreso}"
+									filterBy="#{ingreso.fechaingreso}" filterMatchMode="contains" sortBy="#{ingreso.fechaingreso}"
 									width="110">
 									
 									<h:outputText value="#{ingreso.fechaingreso}" >
@@ -135,7 +135,8 @@
 									<h:outputText value="#{ingreso.fecha_creacion}" >
 										<f:convertDateTime pattern = "dd-MM-yyyy"/>
 									</h:outputText>
-								</p:column>
+								</p:column>		
+
 				
 							</p:dataTable>
 						</h:form>
@@ -273,7 +274,7 @@
 													</p:column>
 												</p:row>
 												
-												<!--Iva item -->
+												<!--Iva -->
 												<p:row>
 													<p:column>
 														<h:outputLabel for="iva" value="Iva" />

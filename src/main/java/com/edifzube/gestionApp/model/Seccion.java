@@ -25,8 +25,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "SECCION")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Seccion implements Serializable {
 	
 	

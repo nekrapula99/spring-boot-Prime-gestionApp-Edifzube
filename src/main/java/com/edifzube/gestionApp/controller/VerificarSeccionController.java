@@ -20,11 +20,11 @@ public class VerificarSeccionController implements Serializable{
 	public void verificarSesion() {
 		try {
 			FacesContext context = FacesContext.getCurrentInstance();
-			UserCredential user= (UserCredential)context.getExternalContext().getSessionMap().get("usuario");
-			if(user == null) {
-				System.out.print("entro a acceso denegado.");
-				context.getExternalContext().redirect("access.xhtml");
-			}
+//			UserCredential user= (UserCredential)context.getExternalContext().getSessionMap().get("usuario");
+//			if(user == null) {
+//				System.out.print("entro a acceso denegado.");
+//				context.getExternalContext().redirect("access.xhtml");
+//			}
 		} catch (Exception e) {
 			// Log
 		}
@@ -32,7 +32,7 @@ public class VerificarSeccionController implements Serializable{
 	
 	public String cerrarSesion() {
 		 System.out.print("user cerrando... ");
-		 FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+		 //FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
 		 return "login?faces-redirect=true";		
 	}
 

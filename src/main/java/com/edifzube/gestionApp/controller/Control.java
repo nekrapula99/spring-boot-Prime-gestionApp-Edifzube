@@ -25,8 +25,8 @@ public class Control {
 	@PostConstruct
 	public void controlPost(){
 		
-		resources = Constantes.rb;
-		System.out.print("Resuorces: "+resources);
+		//resources = Constantes.rb;
+		//System.out.print("Resuorces: "+resources);
 		//String test = resources.getString("grid_total_registros");
 	}
 	
